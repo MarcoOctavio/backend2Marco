@@ -27,16 +27,13 @@ router.post("/login", passport.authenticate("login", { session: false }), (req, 
   res
     .cookie(cookieName, token, {
       httpOnly: true,
-      // secure: true, // en prod con https
-      // sameSite: "strict",
       maxAge: 60 * 60 * 1000,
     })
     .send({ status: "success", payload: { token, user: safeUser } });
 });
 
-// /api/sessions/current
+
 router.get("/current", passport.authenticate("jwt", { session: false }), (req, res) => {
-  // req.user viene del JWT strategy
   res.send({ status: "success", payload: req.user });
 });
 

@@ -44,7 +44,6 @@ class userDBManager {
   }
 
   async update(uid, payload) {
-    // Si viene password, la re-hasheamos
     if (payload?.password) payload.password = createHash(payload.password);
 
     const updated = await userModel.findByIdAndUpdate(uid, payload, { new: true }).lean();
