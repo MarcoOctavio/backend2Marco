@@ -1,6 +1,6 @@
-import userModel from "./models/userModel.js";
-import { cartModel } from "./models/cartModel.js";
-import { createHash } from "../utils/passwordUtil.js";
+import userModel from "../models/userModel.js";
+import { cartModel } from "../models/cartModel.js";
+import { createHash } from "../../utils/passwordUtil.js";
 
 class userDBManager {
   async getAll() {

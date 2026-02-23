@@ -1,4 +1,4 @@
-import { cartModel } from "./models/cartModel.js";
+import { cartModel } from "../models/cartModel.js";
 
 class cartDBManager {
 
@@ -111,4 +111,4 @@ class cartDBManager {
     }
 }
 
-export { cartDBManager };
+export default cartDBManager;

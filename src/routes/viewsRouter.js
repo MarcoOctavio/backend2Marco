@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { productDBManager } from '../dao/productDBManager.js';
-import { cartDBManager } from '../dao/cartDBManager.js';
+import ProductDBManager from '../dao/mongo/productDBManager.js';
+import CartDBManager from '../dao/mongo/cartDBManager.js';
 
 const router = Router();
-const ProductService = new productDBManager();
-const CartService = new cartDBManager(ProductService);
+const ProductService = new ProductDBManager();
+const CartService = new CartDBManager(ProductService);
 
 router.get('/products', async (req, res) => {
     const products = await ProductService.getAllProducts(req.query);

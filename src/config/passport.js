@@ -15,6 +15,7 @@ const cookieExtractor = (req) => {
 };
 
 export const initializePassport = () => {
+
   passport.use(
     "register",
     new LocalStrategy(
@@ -24,7 +25,7 @@ export const initializePassport = () => {
           const { first_name, last_name, age } = req.body;
 
           if (!first_name || !last_name || age === undefined) {
-            return done(null, false, { message: "Faltan campos requeridos para registrar." });
+            return done(null, false, { message: "Faltan campos requeridos." });
           }
 
           const exists = await userModel.findOne({ email });
@@ -52,24 +53,31 @@ export const initializePassport = () => {
 
   passport.use(
     "login",
-    new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
-      try {
-        const user = await userModel.findOne({ email });
-        if (!user) return done(null, false, { message: "Usuario no encontrado." });
+    new LocalStrategy(
+      { usernameField: "email" },
+      async (email, password, done) => {
+        try {
+          const user = await userModel.findOne({ email });
 
-        if (!isValidPassword(user, password)) {
-          return done(null, false, { message: "Password incorrecto." });
+          if (!user) {
+            return done(null, false, { message: "Usuario no encontrado." });
+          }
+
+          if (!isValidPassword(user, password)) {
+            return done(null, false, { message: "Password incorrecto." });
+          }
+
+          return done(null, user);
+
+        } catch (err) {
+          return done(err);
         }
-
-        return done(null, user);
-      } catch (err) {
-        return done(err);
       }
-    })
+    )
   );
 
   passport.use(
-    "jwt",
+    "current",
     new JwtStrategy(
       {
         jwtFromRequest: ExtractJwt.fromExtractors([
@@ -80,7 +88,15 @@ export const initializePassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          return done(null, jwt_payload.user);
+
+          const user = await userModel.findById(jwt_payload.id);
+
+          if (!user) {
+            return done(null, false);
+          }
+
+          return done(null, user);
+
         } catch (err) {
           return done(err, false);
         }

@@ -1,4 +1,4 @@
-import productModel from "./models/productModel.js";
+import productModel from "../models/productModel.js";
 
 class productDBManager {
 
@@ -56,5 +56,4 @@ class productDBManager {
         return result;
     }
 }
-
-export { productDBManager };
+export default productDBManager;
