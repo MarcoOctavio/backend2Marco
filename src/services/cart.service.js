@@ -38,7 +38,6 @@ export default class CartService {
     }
   }
 
-  // Si nada fue comprado
   if (totalAmount === 0) {
     return {
       message: "No se pudo procesar ninguna compra",
@@ -46,14 +45,13 @@ export default class CartService {
     };
   }
 
-  // Crear ticket
   const ticket = await this.ticketRepo.create({
     code: crypto.randomUUID(),
     amount: totalAmount,
     purchaser: userEmail,
   });
 
-  // 🔥 Filtrar carrito: dejar solo los rechazados
+
   cart.products = cart.products.filter(item =>
     rejectedProducts.some(id => id.toString() === item.product.toString())
   );
