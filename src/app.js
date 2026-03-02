@@ -20,8 +20,17 @@ dotenv.config();
 
 const app = express();
 
-const uri = "mongodb://127.0.0.1:27017/entrega-final";
-mongoose.connect(uri);
+const connectMongo = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB connected successfully");
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    process.exit(1);
+  }
+};
+
+connectMongo();
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/../views");
@@ -43,7 +52,7 @@ app.use("/api/sessions", sessionsRouter);
 
 app.use("/", viewsRouter);
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => {
   console.log(`Start server in PORT ${PORT}`);
 });
